@@ -1,174 +1,136 @@
-\# HSP vs Pure Random Walk Planner Comparison in PDDL4J
+# HSP vs Pure Random Walk Planner Comparison in PDDL4J
 
+**Student:** Touseeq Danish  
+**Email:** touseeqbalouch@gmail.com  
+**Repository:** https://github.com/YOUR-REAL-REPO
 
+---
 
-Students: REAL NAME 1, REAL NAME 2  
+## 1. Project Overview
 
-Repository: YOUR REAL GITHUB URL
+This project was developed as part of an automated planning assignment using the **PDDL4J library**.
 
+The objective was to implement a custom planner in Java and compare its performance against the built-in **HSP (Heuristic State Space Planner)**.
 
+The custom planner is based on a **Pure Random Walk (PRW)** strategy inspired by stochastic search methods used in classical planning research (e.g., Arvand-style planning).
 
-\## 1. Project Overview
+The project evaluates both planners across standard benchmark domains and analyzes their performance in terms of runtime and solution quality.
 
+---
 
+## 2. PDDL4J Library
 
-This project was completed for an automated planning assignment using the PDDL4J library.
+**PDDL4J** is an open-source Java library for automated planning based on the Planning Domain Definition Language (PDDL).
 
+PDDL is widely used in AI planning research to describe:
 
-
-The goal of the assignment was to implement a custom planner in Java using PDDL4J and compare its performance with the built-in HSP planner. The custom planner uses a Pure Random Walk planning procedure inspired by the Arvand paper.
-
-
-
-The project includes:
-
-
-
-\- a Java implementation of a Pure Random Walk planner
-
-\- a Python script for comparing planners
-
-\- experiment results on four benchmark domains
-
-\- figures for runtime and makespan
-
-\- a PDF report containing the final comparison
-
-
-
-\## 2. PDDL4J Library
-
-
-
-PDDL4J is an open source Java library for automated planning based on PDDL, the Planning Domain Definition Language.
-
-
-
-PDDL is a standard language used to describe planning domains and planning problems. It is widely used in automated planning research because it allows planners to be compared on common benchmark problems.
-
-
+- Planning domains (actions, predicates, and rules)
+- Planning problems (initial states and goal states)
 
 PDDL4J provides:
 
+- A PDDL parser and problem instantiation tools
+- Grounding and preprocessing utilities
+- State-space search infrastructure
+- Classical planning heuristics (e.g., Fast Forward heuristic)
+- Reference planners such as HSP
 
+This project uses PDDL4J to:
 
-\- a PDDL parser
+- Parse benchmark planning problems
+- Instantiate planning states
+- Execute both HSP and the custom PRW planner
+- Evaluate performance across multiple domains
 
-\- an HDDL parser
+---
 
-\- tools for representing planning domains and problems
-
-\- preprocessing and grounding mechanisms
-
-\- classical planning heuristics
-
-\- example planners such as HSP and FastForward
-
-
-
-This project uses PDDL4J to parse PDDL benchmark problems, instantiate planning tasks, and run both the built-in HSP planner and the custom Pure Random Walk planner.
-
-
-
-\## 3. Assignment Goal
-
-
+## 3. Assignment Objectives
 
 The assignment required the following:
 
+1. Implement a custom planner in Java using PDDL4J
+2. Follow the PDDL4J tutorial: *“Implement your own planner”*
+3. Design a **Pure Random Walk-based planning algorithm**
+4. Compare performance with the built-in **HSP planner**
+5. Evaluate on four benchmark domains:
+   - Blocksworld
+   - Depot
+   - Gripper
+   - Logistics
+6. Measure performance using:
+   - Runtime (seconds)
+   - Makespan (number of actions in the plan)
+7. Generate experimental plots:
+   - Runtime per domain
+   - Makespan per domain
+8. Produce a reproducible GitHub repository with scripts and results
+9. Provide a final PDF report with results and analysis
 
+---
 
-1\. Implement a custom planner in Java using PDDL4J.
+## 4. Implemented Planners
 
-2\. Follow the PDDL4J tutorial section "Implement your own planner".
+### 4.1 HSP Planner (Baseline)
 
-3\. Implement a planning procedure based on Pure Random Walks.
+HSP (Heuristic State-space Planner) is the baseline planner provided by PDDL4J.
 
-4\. Compare the custom planner with HSP, the PDDL4J A\* planner.
+It uses:
 
-5\. Use four benchmark domains:
+- Heuristic-guided A* search
+- Fast Forward heuristic (`FAST_FORWARD`)
+- Deterministic state-space exploration
 
-&#x20;  - blocksworld
+HSP is used as the reference system for evaluating the quality of the custom planner.
 
-&#x20;  - depot
+---
 
-&#x20;  - gripper
+### 4.2 Pure Random Walk (PRW) Planner
 
-&#x20;  - logistics
+The custom planner implements a **Pure Random Walk (PRW)** strategy.
 
-6\. Measure two metrics:
+Instead of systematically exploring a search tree, the planner:
 
-&#x20;  - total runtime
+- Generates multiple random walks from the current state
+- Each walk applies randomly selected applicable actions
+- Evaluates resulting states using a heuristic function
+- Selects the best-performing walk
+- Commits to that path if it improves the current solution
+- Restarts when stagnation occurs
 
-&#x20;  - makespan, meaning the number of actions in the plan
+This process continues until:
 
-7\. Generate eight figures:
+- A goal state is reached, or  
+- A timeout occurs
 
-&#x20;  - runtime figure for each domain
+---
 
-&#x20;  - makespan figure for each domain
+### Key Parameters
 
-8\. Include the script and results in a GitHub repository.
+The planner supports the following configuration options:
 
-9\. Include a PDF report with student names and repository link.
+- `-n` / `--walks`  
+  Number of random walks per iteration
 
+- `-d` / `--depth`  
+  Maximum depth of each random walk
 
+- `-s` / `--stagnation`  
+  Number of non-improving iterations before restart
 
-\## 4. Implemented Planners
+- `--seed`  
+  Random seed for reproducibility
 
+- `-e` / `--heuristic`  
+  Heuristic used for evaluation (default: FAST_FORWARD)
 
+- `-t`  
+  Timeout per problem instance (in seconds)
 
-\### 4.1 HSP
+---
 
+### Implementation Location
 
-
-HSP is the reference planner used for comparison.
-
-
-
-It is the built-in PDDL4J heuristic state-space planner. It uses A\* search with a heuristic function.
-
-
-
-In this project, HSP is called from the comparison script and used as the baseline planner.
-
-
-
-\### 4.2 Pure Random Walk Planner
-
-
-
-The custom planner is a Pure Random Walk planner implemented in Java.
-
-
-
-The planner repeatedly performs random walks from a planning state. During each walk, it randomly chooses applicable actions and moves through the state space. The search continues until a goal state is found, the stagnation condition is reached, or the timeout is exceeded.
-
-
-
-The planner exposes several parameters:
-
-
-
-\- `-n`: number of random walks
-
-\- `-d`: maximum depth of each walk
-
-\- `-s`: stagnation limit
-
-\- `--seed`: optional random seed for reproducible results
-
-\- `-e`: heuristic used to evaluate states
-
-\- `-t`: timeout in seconds
-
-
-
-The planner is located in the Java source code as:
-
-
+The PRW planner is implemented in:
 
 ```text
-
-fr.uga.pddl4j.examples.prw.PRW
-
+src/main/java/fr/uga/pddl4j/examples/prw/PRW.java
